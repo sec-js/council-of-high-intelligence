@@ -56,7 +56,7 @@ fi
 # Google via Gemini CLI
 gemini_bin="$(check_command gemini)"
 if [[ -n "$gemini_bin" ]] && run_with_timeout gemini --version >/dev/null 2>&1; then
-  providers+=("$(json_provider "google" "true" "gemini_cli" "$gemini_bin" '"gemini-2.5-pro"')")
+  providers+=("$(json_provider "google" "true" "gemini_cli" "$gemini_bin" '"gemini-3-pro"')")
 else
   providers+=("$(json_provider "google" "false" "gemini_cli" "${gemini_bin:-not_found}" '')")
 fi
@@ -82,7 +82,7 @@ cursor_bin="$(check_command cursor-agent)"
 if [[ -n "$cursor_bin" ]] && run_with_timeout cursor-agent --version >/dev/null 2>&1; then
   # Cross-family defaults so a Cursor seat adds real diversity, not a
   # second Anthropic-biased model. Verify live IDs with `cursor-agent --list-models`.
-  providers+=("$(json_provider "cursor_cli" "true" "cursor_cli" "$cursor_bin" '"gpt-5.4-high","claude-opus-4-7-thinking-high","gemini-2.5-pro","grok-4"')")
+  providers+=("$(json_provider "cursor_cli" "true" "cursor_cli" "$cursor_bin" '"gpt-5.4-high","claude-opus-4-7-thinking-high","gemini-3-pro","grok-4"')")
 else
   providers+=("$(json_provider "cursor_cli" "false" "cursor_cli" "${cursor_bin:-not_found}" '')")
 fi
@@ -96,9 +96,11 @@ if [[ -n "${NVIDIA_API_KEY:-}" ]]; then
   # Verify the key is not a placeholder (real keys start with nvapi-)
   if [[ "${NVIDIA_API_KEY}" =~ ^nvapi- ]]; then
     # Optional: confirm catalog reachability. Skip if curl missing or offline.
+    # The auth header is passed via process substitution so the key never
+    # appears in curl's argv (visible to other local users via `ps`).
     if command -v curl >/dev/null 2>&1; then
       if run_with_timeout curl -sf -o /dev/null \
-          -H "Authorization: Bearer ${NVIDIA_API_KEY}" \
+          -H @<(printf 'Authorization: Bearer %s\n' "${NVIDIA_API_KEY}") \
           "${nim_endpoint}/models" 2>/dev/null; then
         nim_available=true
       fi

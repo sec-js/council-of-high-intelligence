@@ -1,5 +1,9 @@
 # Example seat mapping for multi-provider / multi-model exploration.
 # Use with: /council --profile exploration-orthogonal --models configs/provider-model-slots.example.yaml "..."
+#
+# Model IDs drift — verify against your provider catalogs before use
+# (these track configs/auto-route-defaults.yaml; anthropic seats use
+# the opus/sonnet aliases resolved by the host runtime).
 
 profile: exploration-orthogonal
 strategy:
@@ -11,15 +15,15 @@ strategy:
 seats:
   socrates:
     provider: anthropic
-    model: claude-sonnet-4
+    model: sonnet
     reasoning_mode: analytical
   feynman:
     provider: openai
-    model: gpt-5
+    model: gpt-5.4
     reasoning_mode: mechanistic
   sun-tzu:
     provider: google
-    model: gemini-2.5-pro
+    model: gemini-3-pro
     reasoning_mode: strategic
   machiavelli:
     provider: xai
@@ -27,21 +31,21 @@ seats:
     reasoning_mode: adversarial
   ada:
     provider: openai
-    model: o3
+    model: gpt-5.4
     reasoning_mode: formal
   lao-tzu:
     provider: anthropic
-    model: claude-sonnet-4
+    model: sonnet
     reasoning_mode: emergent
   aurelius:
     provider: google
-    model: gemini-2.5-pro
+    model: gemini-3-pro
     reasoning_mode: normative
   torvalds:
     provider: openai
-    model: gpt-5-mini
+    model: gpt-5.4
     reasoning_mode: pragmatic
 
 fallback:
-  provider: openai
-  model: gpt-5-mini
+  provider: anthropic
+  model: sonnet

@@ -24,10 +24,11 @@ What good output looks like:
 - evidence labels across multiple categories (`empirical`, `mechanistic`, `strategic`, `ethical`, `heuristic`)
 - clear unknowns list with concrete data needed
 
-Expected verdict sections:
-- Problem, Council Composition, Model/Provider Routing, Consensus Position
-- Key Insights by Member, Points of Agreement/Disagreement
-- Minority Report, Unresolved Questions, Epistemic Diversity Scorecard, Recommended Next Steps
+Expected verdict sections (see the Council Verdict template in `SKILL.md` for the full canonical list):
+- Problem, Council Composition, Chairman, Provider Routing
+- Acceptable Compromises, Kill Criteria, Concrete Next Step
+- Unresolved Questions, Recommended Next Steps, Consensus & Agreement, Vote Tally
+- Key Insights by Member, Points of Disagreement, Minority Report, Epistemic Diversity Scorecard, Follow-Up
 
 ## Demo B — Full mode: Exploration profile (market-entry triad)
 
