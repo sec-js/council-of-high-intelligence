@@ -23,6 +23,9 @@ jobs:
           tar --exclude='./.git' \
               --exclude='./.github' \
               --exclude='./demos' \
+              --exclude='.DS_Store' \
+              --exclude='./.gstack' \
+              --exclude='*.log' \
               -czf "../${ARCHIVE}" .
           echo "ARCHIVE=$(pwd)/../${ARCHIVE}" >> "$GITHUB_ENV"
 

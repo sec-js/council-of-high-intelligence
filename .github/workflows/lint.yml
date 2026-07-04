@@ -28,10 +28,16 @@ jobs:
           shellcheck scripts/council-simulation-checklist.sh
 
       - name: Markdownlint
+        # Rule selection lives in .markdownlint.json. The previous inline
+        # --disable invocation was missing the trailing "--" that the variadic
+        # flag requires, so it swallowed the file arguments and this step
+        # silently linted nothing.
         run: |
-          markdownlint \
-            --disable MD013 MD024 MD033 MD041 \
-            README.md CONTRIBUTING.md CHANGELOG.md \
-            SKILL.md SKILL.codex.md \
+          markdownlint --config .markdownlint.json \
+            README.md CONTRIBUTING.md CHANGELOG.md CLAUDE.md \
+            SKILL.md SKILL.codex.md SKILL.gemini.md \
             "agents/**/*.md" \
             "demos/**/*.md"
+
+      - name: Council simulation checklist (drift guard)
+        run: ./scripts/council-simulation-checklist.sh

@@ -17,9 +17,11 @@ warn() { echo "[WARN] $1"; }
 pass "SKILL.md exists"
 [[ -f "SKILL.codex.md" ]] || fail "SKILL.codex.md is missing"
 pass "SKILL.codex.md exists"
+[[ -f "SKILL.gemini.md" ]] || fail "SKILL.gemini.md is missing"
+pass "SKILL.gemini.md exists"
 
 if compgen -G "agents/council-*.md" >/dev/null; then
-  agent_count=$(python3 -c "import glob; print(len(glob.glob('agents/council-*.md')))" 2>/dev/null || echo "unknown")
+  agent_count=$(compgen -G "agents/council-*.md" | wc -l | tr -d ' ')
   pass "Agent definitions found (count=${agent_count})"
 else
   fail "No agent definitions found under agents/council-*.md"
@@ -110,6 +112,44 @@ pass "Session Metadata schema wired in SKILL.md"
 
 grep -q "Session Metadata\|session metadata\|session_metadata" SKILL.codex.md || fail "Session Metadata missing in SKILL.codex.md (issue #7)"
 pass "Session Metadata referenced in SKILL.codex.md"
+
+# --- SKILL.gemini.md parity checks ---
+# The Gemini variant is the least-exercised of the three coordinator files and
+# is exactly where feature drift shipped once before. Every protocol feature
+# checked for codex above is checked for gemini here.
+
+grep -q "anonymiz" SKILL.gemini.md || fail "Round 2 anonymization missing in SKILL.gemini.md (issue #17)"
+pass "Round 2 anonymization wired in SKILL.gemini.md"
+
+grep -q "Anti-conformity directive" SKILL.gemini.md || fail "Anti-conformity directive missing in SKILL.gemini.md (issue #19)"
+pass "Anti-conformity directive present in SKILL.gemini.md"
+
+grep -q -i "chairman" SKILL.gemini.md || fail "Chairman role missing in SKILL.gemini.md (issue #18)"
+pass "Chairman role wired in SKILL.gemini.md"
+
+grep -q "Acceptable Compromises" SKILL.gemini.md || fail "Acceptable Compromises missing in SKILL.gemini.md (issue #21)"
+grep -q "Kill Criteria" SKILL.gemini.md || fail "Kill Criteria missing in SKILL.gemini.md (issue #21)"
+grep -q "Concrete Next Step" SKILL.gemini.md || fail "Concrete Next Step missing in SKILL.gemini.md (issue #21)"
+pass "Verdict actionability sections present in SKILL.gemini.md"
+
+grep -q "openai_compatible_api\|openai-compatible\|OpenAI-Compatible" SKILL.gemini.md || fail "openai_compatible_api archetype missing in SKILL.gemini.md (issue #16)"
+pass "openai_compatible_api archetype wired in SKILL.gemini.md"
+
+grep -q "Session Metadata\|session metadata\|session_metadata" SKILL.gemini.md || fail "Session Metadata missing in SKILL.gemini.md (issue #7)"
+pass "Session Metadata referenced in SKILL.gemini.md"
+
+# --- Structured stance / weighted tally parity (PR #36) ---
+# All three coordinator files must carry the STANCE line, the Vote Tally
+# verdict field, and the 1.5x domain-weight seat. This is the check that
+# would have caught the Gemini regression.
+
+for skill_file in SKILL.md SKILL.codex.md SKILL.gemini.md; do
+  grep -q "STANCE:" "${skill_file}" || fail "Structured STANCE line missing in ${skill_file} (PR #36)"
+  grep -q "Vote Tally" "${skill_file}" || fail "Vote Tally verdict field missing in ${skill_file} (PR #36)"
+  grep -q "1\.5" "${skill_file}" || fail "1.5x domain-weight seat missing in ${skill_file} (PR #36)"
+  grep -q "2/3" "${skill_file}" || fail "2/3 consensus threshold missing in ${skill_file} (PR #36)"
+done
+pass "Structured stance + weighted tally present in all three SKILL files"
 
 # --- Agent structure checks ---
 
@@ -215,23 +255,32 @@ else
   warn "shellcheck not installed; skipped"
 fi
 
-./install.sh --dry-run >/tmp/council-install-dry-run.log
+TMP_LOG_DIR="$(mktemp -d)"
+trap 'rm -rf "${TMP_LOG_DIR}"' EXIT
+
+./install.sh --dry-run >"${TMP_LOG_DIR}/dry-run.log"
 pass "install.sh --dry-run completed"
 
-grep -q "Installed .* council agents" /tmp/council-install-dry-run.log || fail "install dry-run output missing agent install summary"
+grep -q "Installed .* council agents" "${TMP_LOG_DIR}/dry-run.log" || fail "install dry-run output missing agent install summary"
 pass "install summary output present"
 
-./install.sh --dry-run --copy-configs >/tmp/council-install-dry-run-configs.log
+./install.sh --dry-run --copy-configs >"${TMP_LOG_DIR}/dry-run-configs.log"
 pass "install.sh --dry-run --copy-configs completed"
 
-grep -q "Installed .* config files" /tmp/council-install-dry-run-configs.log || fail "copy-configs dry-run output missing config install summary"
+grep -q "Installed .* config files" "${TMP_LOG_DIR}/dry-run-configs.log" || fail "copy-configs dry-run output missing config install summary"
 pass "config summary output present"
 
-./install.sh --dry-run --codex >/tmp/council-install-dry-run-codex.log
+./install.sh --dry-run --codex >"${TMP_LOG_DIR}/dry-run-codex.log"
 pass "install.sh --dry-run --codex completed"
 
-grep -q "Installed Codex skill to" /tmp/council-install-dry-run-codex.log || fail "codex dry-run output missing Codex skill summary"
+grep -q "Installed Codex skill to" "${TMP_LOG_DIR}/dry-run-codex.log" || fail "codex dry-run output missing Codex skill summary"
 pass "Codex install summary output present"
+
+./install.sh --dry-run --gemini >"${TMP_LOG_DIR}/dry-run-gemini.log"
+pass "install.sh --dry-run --gemini completed"
+
+grep -q "gemini-extension.json" "${TMP_LOG_DIR}/dry-run-gemini.log" || fail "gemini dry-run output missing gemini-extension.json manifest step"
+pass "Gemini install manifest step present"
 
 echo
 echo "Checklist complete."
