@@ -2,10 +2,11 @@
 
 ## Architecture
 
-- `SKILL.md` — coordinator protocol with execution sequence, modes, and verdict templates
-- `SKILL.codex.md` — Codex-specific council coordinator protocol
+- `SKILL.md` — coordinator protocol with execution sequence, modes, and verdict templates (canonical — feature changes land here first, then get mirrored)
+- `SKILL.codex.md` — Codex-specific council coordinator protocol (compressed mirror of SKILL.md)
+- `SKILL.gemini.md` — Gemini CLI-specific council coordinator protocol (compressed mirror of SKILL.md)
 - `agents/council-*.md` — 18 member personas with YAML frontmatter
-- `install.sh` — installs to `~/.claude/` and optionally `~/.codex/skills/council/`
+- `install.sh` — installs to `~/.claude/`, optionally `~/.codex/skills/council/` and `~/.gemini/extensions/council-of-high-intelligence/`
 - `configs/` — provider/model routing templates
 - `demos/` — example prompts and scoring rubric
 - `scripts/` — validation checklist
@@ -27,6 +28,8 @@
 - Always run `./scripts/council-simulation-checklist.sh` after changes
 - Always run `./install.sh --dry-run` to verify installation
 - When changing Codex installation, also run `./install.sh --dry-run --codex`
+- When changing Gemini installation, also run `./install.sh --dry-run --gemini`
+- When changing protocol features in `SKILL.md`, mirror them in **both** `SKILL.codex.md` and `SKILL.gemini.md` (or document why a host is exempt) — the checklist verifies parity
 - Test at least one mode (full/quick/duo) after protocol changes
 
 ### Style

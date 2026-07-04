@@ -213,7 +213,7 @@ The council automatically detects installed LLM providers and distributes member
 
 NVIDIA NIM ([build.nvidia.com](https://build.nvidia.com)) exposes 130+ open-weight models (DeepSeek, Kimi, MiniMax, GLM, Qwen, Nemotron) via an OpenAI-compatible endpoint. Free tier: 1,000 credits, 40 RPM. Detection requires only `export NVIDIA_API_KEY=nvapi-...` — no CLI binary needed. See `configs/provider-model-slots.nim.example.yaml` for a sample seat allocation.
 
-Cursor CLI ([cursor.com/cli](https://cursor.com/cli)) is a model **aggregator** — one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families through a single `CURSOR_API_KEY` (or `cursor-agent login`). Members route via headless read-only mode (`cursor-agent -p --mode ask --model <id>`). Install with `curl https://cursor.com/install -fsS | bash`. Because Cursor can serve `claude-*` models, pick **cross-family** Cursor models (e.g. `gpt-5.4-high`, `gemini-2.5-pro`, `grok-4`) when a seat needs to add diversity rather than duplicate Anthropic bias. List live IDs with `cursor-agent --list-models`. See `configs/provider-model-slots.cursor.example.yaml` for a sample seat allocation.
+Cursor CLI ([cursor.com/cli](https://cursor.com/cli)) is a model **aggregator** — one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families through a single `CURSOR_API_KEY` (or `cursor-agent login`). Members route via headless read-only mode (`cursor-agent -p --mode ask --model <id>`). Install with `curl https://cursor.com/install -fsS | bash`. Because Cursor can serve `claude-*` models, pick **cross-family** Cursor models (e.g. `gpt-5.4-high`, `gemini-3-pro`, `grok-4`) when a seat needs to add diversity rather than duplicate Anthropic bias. List live IDs with `cursor-agent --list-models`. See `configs/provider-model-slots.cursor.example.yaml` for a sample seat allocation.
 
 **How routing works:**
 1. Polarity pairs are separated across providers (hard constraint)
@@ -255,20 +255,23 @@ Full mode runs 7 steps: provider routing → problem restate gate → independen
 - **Bounded protocol is the forcing function** — deliberation runs a fixed round budget (full 3 / quick 2 / duo 3), so it cannot loop. Anti-recursion guards (the "hemlock rule" caps Socrates' questioning; any pair exceeding 2 messages is cut off) enforce the bound mid-round.
 - Dissent quota + novelty gate + counterfactual pass prevent premature convergence
 - **Tie-breaking is a counted tally, not a prose impression** — each member emits a structured `STANCE:` line in the final round; consensus requires a **domain-weighted 2/3 majority** (the on-domain seat carries 1.5×, designated *before* positions exist). A genuine split is escalated to the user with the full tally rather than forced into false consensus.
-- All verdicts include a Vote Tally and a Follow-Up section for outcome tracking
+- Full and Quick verdicts include a Vote Tally (duo issues no tally — it is dialectic, not decision-issuing); all verdicts include a Follow-Up section for outcome tracking
 
 </details>
 
 ## Installation
 
-Installs 18 council agents plus skill files for Claude and/or Codex.
+Installs 18 council agents plus skill files for Claude, Codex, and/or Gemini CLI.
 
 ```bash
 ./install.sh                                   # Claude install (default)
 ./install.sh --codex                           # Claude + Codex skill install
 ./install.sh --codex-only                      # Codex-only install
+./install.sh --gemini                          # Claude + Gemini CLI extension install
+./install.sh --gemini-only                     # Gemini-only install
 ./install.sh --claude-dir /path/to/.claude     # Non-default Claude config directory
 ./install.sh --codex-dir /path/to/.codex       # Non-default Codex config directory
+./install.sh --gemini-dir /path/to/.gemini     # Non-default Gemini config directory
 ./install.sh --dry-run                          # Preview without writing
 ./install.sh --copy-configs                     # Also install model routing templates
 ```

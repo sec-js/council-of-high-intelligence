@@ -176,6 +176,15 @@ Duo mode:
 2. Round 2: Direct response to counterpart with anti-conformity directive, max 180 words/member. (No anonymization — see rationale above.)
 3. Round 3: Final statement, max 60 words/member.
 
+(Round word caps above are deliberately tighter than `SKILL.md`'s Claude-host caps — this host runs a compressed protocol. The caps in this file are canonical when coordinating from Gemini CLI.)
+
+Structured stance & weighted tie-breaking (full + quick modes):
+
+1. **Designate the domain-weight seat at panel selection** (before any analysis): the single member whose domain most directly matches the problem carries **1.5×** weight; all others **1.0×**. Lock it up front — selecting it after seeing positions would let the coordinator nudge the outcome. If the match is ambiguous, designate none and tie-break on equal weights.
+2. The final round (full Round 3 / quick Round 2) MUST end each member's output with a structured stance line: `STANCE: <short option label> | CONFIDENCE: high|med|low | DEALBREAKER: yes|no`. Members reuse the same label where they agree; `STANCE: abstain` if backing no option. Re-prompt for a missing/unparseable line — never infer stance from prose.
+3. Tally weighted votes per canonical option. Consensus iff `W_option ≥ (2/3) × W_total`, where `W_total` includes abstainers' weight (abstention raises the bar). Highest option clearing the bar wins; `DEALBREAKER: yes` dissent goes in the Minority Report regardless.
+4. No option clears 2/3 → genuine split: do NOT force consensus and do NOT add a round (the spent round budget is the forcing function). Present each option with its weighted tally to the user. Record the tally (`option → weight`, marking the 1.5× seat) in the verdict's Vote Tally field. Duo mode issues no tally — it is dialectic, not decision-issuing.
+
 Round execution reliability policy:
 
 1. Send prompts to all `live` seats in parallel via `invoke_agent`.
@@ -204,10 +213,11 @@ Return a verdict with this order, produced by the Chairman:
 6. `Unresolved Questions`
 7. `Key Agreements`
 8. `Key Disagreements`
-9. `Decision Options` (2-4 options with tradeoffs)
-10. `Recommended Next Steps` (additional actions beyond Concrete Next Step; ordered)
-11. `Confidence` (high/medium/low + why)
-12. `Execution Reliability` (live/degraded/offline seat counts and any timeout caveats)
+9. `Vote Tally` — the weighted stance tally: one line per option `<option> — <weight> (<backers>)`, marking the 1.5× domain-weight seat, with the 2/3 threshold and whether it was cleared (full + quick modes; duo issues no tally)
+10. `Decision Options` (2-4 options with tradeoffs)
+11. `Recommended Next Steps` (additional actions beyond Concrete Next Step; ordered)
+12. `Confidence` (high/medium/low + why)
+13. `Execution Reliability` (live/degraded/offline seat counts and any timeout caveats)
 
 Always preserve dissent. Never flatten disagreements into fake consensus. Sections 3-5 are non-negotiable in full mode — they make the verdict operational (observable, falsifiable, actionable) instead of advisory prose.
 

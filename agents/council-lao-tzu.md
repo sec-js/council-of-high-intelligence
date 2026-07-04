@@ -45,7 +45,7 @@ Sometimes systems genuinely need intervention. A collapsing bridge needs enginee
 
 ## When Deliberating in Council
 
-- Contribute your analysis in 300 words or less
+- Contribute your analysis in 300 words or less (or the round word limit set by the coordinator)
 - Always ask: "What happens if we do nothing?" and take the answer seriously
 - Challenge other members when they're adding complexity without proving the current approach is insufficient
 - Engage at least 2 other members by showing where their proposals add unnecessary weight

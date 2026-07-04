@@ -127,7 +127,7 @@ Flag priority: `--quick` / `--duo` set the mode. `--full` / `--triad` / `--membe
 ## Council Profiles
 
 ### `classic` (default)
-All 11 members with the domain triads above.
+All 18 members with the domain triads above.
 
 ### `exploration-orthogonal`
 12-member panel for discovery and "unknown unknowns" reduction.
@@ -234,7 +234,7 @@ The Chairman is the synthesizer — a named, audited role distinct from the deli
 
 **Selection algorithm** (apply in order — first match wins):
 
-1. **Explicit override**: If `--chairman <name>` was passed, use it. `<name>` can be a provider tag (`anthropic`, `openai`, `google`, `ollama`, `nvidia_nim`, `cursor_cli`) or a model alias (`opus`, `sonnet`, `gpt-5.4`, `gemini-2.5-pro`).
+1. **Explicit override**: If `--chairman <name>` was passed, use it. `<name>` can be a provider tag (`anthropic`, `openai`, `google`, `ollama`, `nvidia_nim`, `cursor_cli`) or a model alias (`opus`, `sonnet`, `gpt-5.4`, `gemini-3-pro`).
 2. **Config override**: If `configs/auto-route-defaults.yaml` has a non-null `chairman:` block, use it.
 3. **Auto-select** (default): Pick the highest-tier model among detected providers, **preferring a provider not already on the panel** when possible. Tie-breaker: provider listed first in the detected-providers JSON.
 4. **Single-provider fallback**: If only one provider is detected (Claude-only), use that provider's highest tier (`opus` by default). Note in the verdict that the Chairman shares a provider with one or more panel members.
@@ -245,7 +245,7 @@ The Chairman is the synthesizer — a named, audited role distinct from the deli
 |---|---|
 | anthropic | `opus` |
 | openai | `gpt-5.4` |
-| google | `gemini-2.5-pro` |
+| google | `gemini-3-pro` |
 | ollama | first available local model |
 | nvidia_nim | `deepseek-ai/deepseek-v4-pro` |
 | cursor_cli | `gpt-5.4-high` |
@@ -273,48 +273,68 @@ Run all members **IN PARALLEL**. Each member sees ONLY the problem statement (bl
 **For `codex_exec` (OpenAI)** — run via Bash tool:
 1. Read the member's agent file at `~/.claude/agents/council-{name}.md`
 2. Extract the **Identity**, **Grounding Protocol**, and relevant **Output Format** sections (trimmed — skip Analytical Method, What You See/Miss, When Deliberating)
-3. Build the full prompt with identity inlined, then run:
+3. Build the full prompt with identity inlined. **Never inline the prompt directly into the command string** — problem text containing `"`, `` ` ``, or `$(…)` would break the shell or inject commands. Write it through a quoted heredoc first:
 ```bash
-codex exec -c model="{model}" -c auto_approve=true "{full prompt}" 2>/dev/null
+PROMPT_FILE="$(mktemp)"
+cat > "$PROMPT_FILE" <<'COUNCIL_PROMPT_EOF'
+{full prompt}
+COUNCIL_PROMPT_EOF
+codex exec -c model="{model}" -c auto_approve=true "$(cat "$PROMPT_FILE")" 2>/dev/null
+rm -f "$PROMPT_FILE"
 ```
 4. Capture stdout as the member's output. Timeout: 60 seconds.
 
 **For `gemini_cli` (Google)** — run via Bash tool:
 1. Read and extract identity sections (same as codex_exec above)
-2. Run:
+2. Run (same quoted-heredoc pattern as codex_exec — never inline the prompt):
 ```bash
-gemini -m {model} -p "{full prompt}" 2>/dev/null
+PROMPT_FILE="$(mktemp)"
+cat > "$PROMPT_FILE" <<'COUNCIL_PROMPT_EOF'
+{full prompt}
+COUNCIL_PROMPT_EOF
+gemini -m {model} -p "$(cat "$PROMPT_FILE")" 2>/dev/null
+rm -f "$PROMPT_FILE"
 ```
 3. Capture stdout. Timeout: 60 seconds.
 
 **For `ollama_run` (Ollama)** — run via Bash tool:
 1. Read and extract identity sections (same as above)
-2. Run:
+2. Run (same quoted-heredoc pattern — never inline the prompt):
 ```bash
-ollama run {model} "{full prompt}" 2>/dev/null
+PROMPT_FILE="$(mktemp)"
+cat > "$PROMPT_FILE" <<'COUNCIL_PROMPT_EOF'
+{full prompt}
+COUNCIL_PROMPT_EOF
+ollama run {model} "$(cat "$PROMPT_FILE")" 2>/dev/null
+rm -f "$PROMPT_FILE"
 ```
 3. Capture stdout. Timeout: 120 seconds (local models are slower).
 
 **For `cursor_cli` (Cursor)** — run via Bash tool:
 1. Read and extract identity sections (same as codex_exec above).
 2. Authentication is resolved by the Cursor CLI itself (prior `cursor-agent login` or `CURSOR_API_KEY` env var) — never inline a key. If the call returns an auth error, apply the Fallback rule.
-3. Run in headless print mode, read-only (`--mode ask` keeps the member from touching the filesystem — council members only reason):
+3. Run in headless print mode, read-only (`--mode ask` keeps the member from touching the filesystem — council members only reason). Same quoted-heredoc pattern — never inline the prompt:
 ```bash
-cursor-agent -p --mode ask --model {model} --output-format text "{full prompt}" 2>/dev/null
+PROMPT_FILE="$(mktemp)"
+cat > "$PROMPT_FILE" <<'COUNCIL_PROMPT_EOF'
+{full prompt}
+COUNCIL_PROMPT_EOF
+cursor-agent -p --mode ask --model {model} --output-format text "$(cat "$PROMPT_FILE")" 2>/dev/null
+rm -f "$PROMPT_FILE"
 ```
 4. Capture stdout as the member's output. Timeout: 90 seconds.
 5. If stdout is empty or the command exits non-zero, treat as a failed call and apply the Fallback rule.
 
-Cursor is a model **aggregator** — one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families. For provider-spread purposes it counts as a single provider, but a seat routed to Cursor's `claude-*` model shares Anthropic's training bias with native `anthropic` seats. Prefer cross-family Cursor models (e.g. `gpt-5.4-high`, `gemini-2.5-pro`, `grok-4`) when Cursor is filling a diversity seat. Verify live model IDs with `cursor-agent --list-models`.
+Cursor is a model **aggregator** — one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families. For provider-spread purposes it counts as a single provider, but a seat routed to Cursor's `claude-*` model shares Anthropic's training bias with native `anthropic` seats. Prefer cross-family Cursor models (e.g. `gpt-5.4-high`, `gemini-3-pro`, `grok-4`) when Cursor is filling a diversity seat. Verify live model IDs with `cursor-agent --list-models`.
 
 **For `openai_compatible_api` (NVIDIA NIM, Together, Fireworks, vLLM, any OpenAI-compatible endpoint)** — run via Bash tool:
 1. Read and extract identity sections (same as codex_exec above).
 2. Resolve credentials at runtime: read `api_key_env` from the seat config and look up the value from the environment. If the env var is unset or empty, fall back to anthropic per the Fallback rule below — do NOT inline a placeholder.
 3. Read `base_url` from the seat config (e.g. `https://integrate.api.nvidia.com/v1` for NIM).
-4. Construct an OpenAI-compatible `/chat/completions` call:
+4. Construct an OpenAI-compatible `/chat/completions` call. The Authorization header is passed via process substitution (`-H @<(…)`) so the API key never appears in the process argv (visible to any local user via `ps`):
 ```bash
 curl -sS -X POST "{base_url}/chat/completions" \
-  -H "Authorization: Bearer ${!api_key_env}" \
+  -H @<(printf 'Authorization: Bearer %s\n' "${!api_key_env}") \
   -H "Content-Type: application/json" \
   -d "$(jq -nc \
        --arg model "{model}" \

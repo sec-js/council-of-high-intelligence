@@ -184,6 +184,8 @@ Duo mode:
 2. Round 2: Direct response to counterpart with anti-conformity directive, max 180 words/member. (No anonymization — see rationale above.)
 3. Round 3: Final statement, max 60 words/member.
 
+(Round word caps above are deliberately tighter than `SKILL.md`'s Claude-host caps — this host runs a compressed protocol. The caps in this file are canonical when coordinating from Codex.)
+
 Structured stance & weighted tie-breaking (full + quick modes):
 
 1. **Designate the domain-weight seat at panel selection** (before any analysis): the single member whose domain most directly matches the problem carries **1.5×** weight; all others **1.0×**. Lock it up front — selecting it after seeing positions would let the coordinator nudge the outcome. If the match is ambiguous, designate none and tie-break on equal weights.
@@ -220,10 +222,11 @@ Return a verdict with this order, produced by the Chairman:
 6. `Unresolved Questions`
 7. `Key Agreements`
 8. `Key Disagreements`
-9. `Decision Options` (2-4 options with tradeoffs)
-10. `Recommended Next Steps` (additional actions beyond Concrete Next Step; ordered)
-11. `Confidence` (high/medium/low + why)
-12. `Execution Reliability` (live/degraded/offline seat counts and any timeout caveats)
+9. `Vote Tally` — the weighted stance tally from Step 4: one line per option `<option> — <weight> (<backers>)`, marking the 1.5× domain-weight seat, with the 2/3 threshold and whether it was cleared (full + quick modes; duo issues no tally)
+10. `Decision Options` (2-4 options with tradeoffs)
+11. `Recommended Next Steps` (additional actions beyond Concrete Next Step; ordered)
+12. `Confidence` (high/medium/low + why)
+13. `Execution Reliability` (live/degraded/offline seat counts and any timeout caveats)
 
 Always preserve dissent. Never flatten disagreements into fake consensus. Sections 3-5 are non-negotiable in full mode — they make the verdict operational (observable, falsifiable, actionable) instead of advisory prose.
 

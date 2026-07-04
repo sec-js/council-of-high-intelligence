@@ -73,7 +73,7 @@ seats:
   # Google for breadth on a third axis
   torvalds:
     provider: google
-    model: gemini-2.5-pro
+    model: gemini-3-pro
     reasoning_mode: pragmatic
 
 fallback:
