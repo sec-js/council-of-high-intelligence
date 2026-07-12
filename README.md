@@ -9,13 +9,13 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/0xNyk/council-of-high-intelligence/actions/workflows/lint.yml"><img src="https://github.com/0xNyk/council-of-high-intelligence/actions/workflows/lint.yml/badge.svg" alt="Lint"></a>
   <a href="https://github.com/0xNyk/council-of-high-intelligence/releases"><img src="https://img.shields.io/github/v/release/0xNyk/council-of-high-intelligence" alt="Release"></a>
-  <a href="https://github.com/0xNyk/council-of-high-intelligence/stargazers"><img src="https://img.shields.io/github/stars/0xNyk/council-of-high-intelligence" alt="Stars"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
-  <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code Plugin">
-  <img src="https://img.shields.io/badge/Codex-skill-black" alt="Codex Skill">
-  <img src="https://img.shields.io/badge/Gemini_CLI-extension-4285F4" alt="Gemini CLI Extension">
-  <img src="https://img.shields.io/badge/members-18-orange" alt="18 Members">
+</p>
+
+<p align="center">
+  Runs in Claude Code, Codex, and Gemini CLI.
 </p>
 
 <details>
@@ -23,6 +23,7 @@
 
 - [Quickstart](#quickstart)
 - [Why This Works](#why-this-works)
+- [When Not to Use It](#when-not-to-use-it)
 - [The 18 Council Members](#the-18-council-members)
 - [Three Deliberation Modes](#three-deliberation-modes)
 - [Multi-Provider Auto-Routing](#multi-provider-auto-routing)
@@ -36,7 +37,7 @@
 
 ## Quickstart
 
-### Claude Code (plugin — recommended)
+### Claude Code (plugin, recommended)
 
 ```text
 /plugin marketplace add 0xNyk/council-of-high-intelligence
@@ -79,14 +80,21 @@ The same `/council` commands work in all three hosts.
 
 ## Why This Works
 
-A single LLM gives you one reasoning path dressed up as confidence. Ask it a hard question and you get a fluent, structured, wrong answer. The council gives you structured disagreement instead:
+A single LLM gives you one reasoning path dressed up as confidence. Ask it a hard question and you get a fluent, structured, wrong answer. The council gives you structured disagreement instead.
 
-- **Get genuinely different perspectives** — polarity pairs force real tension (Socrates destroys assumptions; Feynman rebuilds from first principles). Multi-provider routing spreads members across Claude, OpenAI, Gemini, and Ollama so you get actually different reasoning, not costume changes on one model
-- **Catch wrong questions early** — the Problem Restate Gate makes every member reframe the question before analysis begins. If 3 members restate your question differently, the question was the problem
-- **Know what the council can't answer** — verdicts lead with Unresolved Questions and Recommended Next Steps, not with confident-sounding consensus. What the council doesn't know matters more than where it agrees
-- **Prevent groupthink** — dissent quotas, novelty gates, and counterfactual prompts enforce genuine disagreement. If >70% agree too early, two members are forced to steelman the opposing view
+- **Genuinely different perspectives.** Polarity pairs force real tension: Socrates destroys assumptions, Feynman rebuilds from first principles. Multi-provider routing spreads members across Claude, OpenAI, Gemini, and Ollama, so the reasoning actually differs rather than putting one model in eighteen costumes.
+- **Wrong questions caught early.** The Problem Restate Gate makes every member reframe the question before analysis begins. When three members restate your question three different ways, the question was the problem.
+- **An honest map of the gaps.** Verdicts lead with Unresolved Questions and Recommended Next Steps rather than confident-sounding consensus. What the council cannot settle matters more than where it happens to agree.
+- **Groupthink actively suppressed.** Dissent quotas, novelty gates, and counterfactual prompts enforce disagreement. If agreement passes 70% too early, two members are conscripted to steelman the opposing view.
 
-> **Why not just ask Claude directly?** A single prompt gives you one model's confident best guess. The council gives you 3-18 independent analyses from different intellectual traditions, forces them to challenge each other's claims, and synthesizes a verdict that surfaces disagreement rather than hiding it. It's the difference between asking one advisor and convening a board.
+> **Why not just ask Claude directly?** One prompt buys one model's confident best guess. The council runs 3 to 18 independent analyses from different intellectual traditions, forces them to attack each other's claims, and synthesizes a verdict that surfaces the disagreement instead of smoothing it away. It is the difference between asking an advisor and convening a board.
+
+## When Not to Use It
+
+- **Questions with a right answer.** Ask the model, or read the docs. Eighteen personas cannot make a factual lookup more true, and they will cost you eighteen times as much.
+- **Decisions you have already made.** The council will always find a member who agrees with you. That is not validation, it is theatre.
+- **Anything urgent.** Full mode runs three rounds across up to 18 members. Reach for `--quick` or `--duo`, or reach for something else entirely.
+- **Small, reversible calls.** If you can undo it in an afternoon, ship it and find out. Torvalds is on the council for a reason.
 
 ## The 18 Council Members
 
@@ -107,26 +115,26 @@ A single LLM gives you one reasoning path dressed up as confidence. Ask it a har
 | `council-sutskever` | Ilya Sutskever | Scaling frontier & AI safety | opus | When capability becomes risk |
 | `council-kahneman` | Daniel Kahneman | Cognitive bias & decision science | opus | Your own thinking is the first error |
 | `council-meadows` | Donella Meadows | Systems thinking & feedback loops | sonnet | Redesign the system, not the symptom |
-| `council-munger` | Charlie Munger | Multi-model reasoning & economics | sonnet | Invert — what guarantees failure? |
+| `council-munger` | Charlie Munger | Multi-model reasoning & economics | sonnet | Invert: what guarantees failure? |
 | `council-taleb` | Nassim Taleb | Antifragility & tail risk | opus | Design for the tail, not the average |
-| `council-rams` | Dieter Rams | User-centered design | sonnet | Less, but better — the user decides |
+| `council-rams` | Dieter Rams | User-centered design | sonnet | Less, but better; the user decides |
 
 <details>
-<summary><strong>Polarity Pairs</strong> — members are chosen as deliberate counterweights</summary>
+<summary><strong>Polarity Pairs</strong>: members are chosen as deliberate counterweights</summary>
 
-- **Socrates vs Feynman** — Destroys top-down vs rebuilds bottom-up
-- **Aristotle vs Lao Tzu** — Classifies everything vs structure IS the problem
-- **Sun Tzu vs Aurelius** — Wins external games vs governs the internal one
-- **Ada vs Machiavelli** — Formal purity vs messy human incentives
-- **Torvalds vs Watts** — Ships concrete solutions vs questions whether the problem exists
-- **Musashi vs Torvalds** — Waits for the perfect moment vs ships it now
-- **Karpathy vs Sutskever** — Build it, observe it, iterate vs pause, research, ensure safety first
-- **Karpathy vs Ada** — Empirical ML intuition vs formal systems theory
-- **Kahneman vs Feynman** — Your cognition is the first error vs trust first-principles reasoning
-- **Meadows vs Torvalds** — Redesign the feedback loop vs fix the symptom and ship
-- **Munger vs Aristotle** — Multi-model lattice vs single taxonomic system
-- **Taleb vs Karpathy** — Hidden catastrophic tails vs smooth empirical scaling curves
-- **Rams vs Ada** — What the user needs vs what computation can do
+- **Socrates vs Feynman**: Destroys top-down vs rebuilds bottom-up
+- **Aristotle vs Lao Tzu**: Classifies everything vs structure IS the problem
+- **Sun Tzu vs Aurelius**: Wins external games vs governs the internal one
+- **Ada vs Machiavelli**: Formal purity vs messy human incentives
+- **Torvalds vs Watts**: Ships concrete solutions vs questions whether the problem exists
+- **Musashi vs Torvalds**: Waits for the perfect moment vs ships it now
+- **Karpathy vs Sutskever**: Build it, observe it, iterate vs pause, research, ensure safety first
+- **Karpathy vs Ada**: Empirical ML intuition vs formal systems theory
+- **Kahneman vs Feynman**: Your cognition is the first error vs trust first-principles reasoning
+- **Meadows vs Torvalds**: Redesign the feedback loop vs fix the symptom and ship
+- **Munger vs Aristotle**: Multi-model lattice vs single taxonomic system
+- **Taleb vs Karpathy**: Hidden catastrophic tails vs smooth empirical scaling curves
+- **Rams vs Ada**: What the user needs vs what computation can do
 
 </details>
 
@@ -158,7 +166,7 @@ A single LLM gives you one reasoning path dressed up as confidence. Ask it a har
 ```
 
 <details>
-<summary><strong>Pre-defined Triads</strong> — 20 domain-specific 3-member combinations</summary>
+<summary><strong>Pre-defined Triads</strong>: 20 domain-specific 3-member combinations</summary>
 
 | Domain | Triad | Rationale |
 |--------|-------|-----------|
@@ -186,7 +194,7 @@ A single LLM gives you one reasoning path dressed up as confidence. Ask it a har
 </details>
 
 <details>
-<summary><strong>Council Profiles</strong> — pre-built panels for different needs</summary>
+<summary><strong>Council Profiles</strong>: pre-built panels for different needs</summary>
 
 ### `classic` (default)
 All 18 members with domain triads above. Best for broad deliberation.
@@ -205,7 +213,7 @@ All 18 members with domain triads above. Best for broad deliberation.
 
 ## Multi-Provider Auto-Routing
 
-The council automatically detects installed LLM providers and distributes members across them for genuine model diversity — zero config required.
+The council automatically detects installed LLM providers and distributes members across them for genuine model diversity, with zero config required.
 
 ```
 /council --triad decision Should we accept this acquisition offer?
@@ -221,9 +229,9 @@ The council automatically detects installed LLM providers and distributes member
 | NVIDIA NIM | `NVIDIA_API_KEY` env | `openai_compatible_api` |
 | Cursor | `cursor-agent` | `cursor-agent -p` |
 
-NVIDIA NIM ([build.nvidia.com](https://build.nvidia.com)) exposes 130+ open-weight models (DeepSeek, Kimi, MiniMax, GLM, Qwen, Nemotron) via an OpenAI-compatible endpoint. Free tier: 1,000 credits, 40 RPM. Detection requires only `export NVIDIA_API_KEY=nvapi-...` — no CLI binary needed. See `configs/provider-model-slots.nim.example.yaml` for a sample seat allocation.
+NVIDIA NIM ([build.nvidia.com](https://build.nvidia.com)) exposes 130+ open-weight models (DeepSeek, Kimi, MiniMax, GLM, Qwen, Nemotron) via an OpenAI-compatible endpoint. Free tier: 1,000 credits, 40 RPM. Detection requires only `export NVIDIA_API_KEY=nvapi-...`, with no CLI binary needed. A sample seat allocation lives in `configs/provider-model-slots.nim.example.yaml`.
 
-Cursor CLI ([cursor.com/cli](https://cursor.com/cli)) is a model **aggregator** — one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families through a single `CURSOR_API_KEY` (or `cursor-agent login`). Members route via headless read-only mode (`cursor-agent -p --mode ask --model <id>`). Install with `curl https://cursor.com/install -fsS | bash`. Because Cursor can serve `claude-*` models, pick **cross-family** Cursor models (e.g. `gpt-5.4-high`, `gemini-3-pro`, `grok-4`) when a seat needs to add diversity rather than duplicate Anthropic bias. List live IDs with `cursor-agent --list-models`. See `configs/provider-model-slots.cursor.example.yaml` for a sample seat allocation.
+Cursor CLI ([cursor.com/cli](https://cursor.com/cli)) is a model **aggregator**: one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families through a single `CURSOR_API_KEY` (or `cursor-agent login`). Members route via headless read-only mode (`cursor-agent -p --mode ask --model <id>`). Install with `curl https://cursor.com/install -fsS | bash`. Because Cursor can serve `claude-*` models, pick **cross-family** Cursor models (e.g. `gpt-5.4-high`, `gemini-3-pro`, `grok-4`) when a seat needs to add diversity rather than duplicate Anthropic bias. List live IDs with `cursor-agent --list-models`. A sample seat allocation lives in `configs/provider-model-slots.cursor.example.yaml`.
 
 **How routing works:**
 1. Polarity pairs are separated across providers (hard constraint)
@@ -232,9 +240,9 @@ Cursor CLI ([cursor.com/cli](https://cursor.com/cli)) is a model **aggregator** 
 4. If any provider fails, automatic fallback to Claude
 
 **Flags:**
-- `--no-auto-route` — disable auto-routing, use Claude-only defaults
-- `--dry-route` — print the routing table without running the council
-- `--models [path]` — manual override with YAML config (see `configs/provider-model-slots.example.yaml`)
+- `--no-auto-route`: disable auto-routing, use Claude-only defaults
+- `--dry-route`: print the routing table without running the council
+- `--models [path]`: manual override with YAML config (see `configs/provider-model-slots.example.yaml`)
 
 ## Deliberation Protocol
 
@@ -244,43 +252,43 @@ Full mode runs 7 steps: provider routing → problem restate gate → independen
 <summary><strong>Full protocol details</strong></summary>
 
 ### Full Mode (7 steps)
-1. **Provider Detection & Routing** — auto-detect providers, assign members
-2. **Problem Restate Gate** — each member restates the problem + provides an alternative framing before analysis begins
-3. **Round 1: Independent Analysis (blind-first)** — all members analyze in parallel (400 words max)
-4. **Round 2: Cross-Examination** — members challenge each other (300 words, must engage 2+ others)
-5. **Post-Round Enforcement** — dissent quota, novelty gate, agreement check, anti-recursion (single pass)
-6. **Round 3: Final Crystallization** — 100-word position statements
-7. **Verdict Synthesis** — leads with Unresolved Questions and Recommended Next Steps
+1. **Provider Detection & Routing**: auto-detect providers, assign members
+2. **Problem Restate Gate**: each member restates the problem + provides an alternative framing before analysis begins
+3. **Round 1: Independent Analysis (blind-first)**: all members analyze in parallel (400 words max)
+4. **Round 2: Cross-Examination**: members challenge each other (300 words, must engage 2+ others)
+5. **Post-Round Enforcement**: dissent quota, novelty gate, agreement check, anti-recursion (single pass)
+6. **Round 3: Final Crystallization**: 100-word position statements
+7. **Verdict Synthesis**: leads with Unresolved Questions and Recommended Next Steps
 
 ### Quick Mode
-1. **Problem Restate + Rapid Analysis** — reframe + analyze in parallel (200 words max)
-2. **Final Positions** — 75-word crystallization
+1. **Problem Restate + Rapid Analysis**: reframe + analyze in parallel (200 words max)
+2. **Final Positions**: 75-word crystallization
 
 ### Duo Mode
-1. **Problem Restate + Opening Positions** — reframe + state positions (300 words)
-2. **Direct Response** — engage opponent's claims (200 words)
-3. **Final Statements** — 50-word positions
+1. **Problem Restate + Opening Positions**: reframe + state positions (300 words)
+2. **Direct Response**: engage opponent's claims (200 words)
+3. **Final Statements**: 50-word positions
 
 ### Enforcement Mechanisms
-- **Bounded protocol is the forcing function** — deliberation runs a fixed round budget (full 3 / quick 2 / duo 3), so it cannot loop. Anti-recursion guards (the "hemlock rule" caps Socrates' questioning; any pair exceeding 2 messages is cut off) enforce the bound mid-round.
+- **Bounded protocol is the forcing function.** Deliberation runs a fixed round budget (full 3 / quick 2 / duo 3), so it cannot loop. Anti-recursion guards (the "hemlock rule" caps Socrates' questioning; any pair exceeding 2 messages is cut off) enforce the bound mid-round.
 - Dissent quota + novelty gate + counterfactual pass prevent premature convergence
-- **Tie-breaking is a counted tally, not a prose impression** — each member emits a structured `STANCE:` line in the final round; consensus requires a **domain-weighted 2/3 majority** (the on-domain seat carries 1.5×, designated *before* positions exist). A genuine split is escalated to the user with the full tally rather than forced into false consensus.
-- Full and Quick verdicts include a Vote Tally (duo issues no tally — it is dialectic, not decision-issuing); all verdicts include a Follow-Up section for outcome tracking
+- **Tie-breaking is a counted tally, not a prose impression.** Each member emits a structured `STANCE:` line in the final round; consensus requires a **domain-weighted 2/3 majority** (the on-domain seat carries 1.5×, designated *before* positions exist). A genuine split is escalated to the user with the full tally rather than forced into false consensus.
+- Full and Quick verdicts include a Vote Tally (duo issues no tally, since it is dialectic rather than decision-issuing); all verdicts include a Follow-Up section for outcome tracking
 
 </details>
 
 ## Installation
 
-### Option A — Claude Code plugin marketplace (recommended for Claude Code)
+### Option A: Claude Code plugin marketplace (recommended for Claude Code)
 
 ```text
 /plugin marketplace add 0xNyk/council-of-high-intelligence
 /plugin install council@council-of-high-intelligence
 ```
 
-Update later with `/plugin update council`. Plugin installs get automatic updates and namespaced agents (`council:council-socrates`, …). If you previously used `install.sh`, the plugin takes precedence — no cleanup needed.
+Update later with `/plugin update council`. Plugin installs get automatic updates and namespaced agents (`council:council-socrates`, …). If you previously used `install.sh`, the plugin takes precedence, so no cleanup is needed.
 
-### Option B — install.sh (Claude Code, Codex, and/or Gemini CLI)
+### Option B: install.sh (Claude Code, Codex, and/or Gemini CLI)
 
 Installs 18 council agents plus skill files for Claude, Codex, and/or Gemini CLI.
 
@@ -306,10 +314,10 @@ Restart your target client(s) after installing. Run `./scripts/council-simulatio
 - Agent/subagent support in your client (enabled by default)
 
 **Optional providers** (auto-detected for multi-provider routing):
-- [Codex CLI](https://github.com/openai/codex) (OpenAI) — `npm i -g @openai/codex`
-- [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) — see [gemini-cli repo](https://github.com/google-gemini/gemini-cli)
-- [Ollama](https://ollama.com) (local models) — install from ollama.com
-- [Cursor CLI](https://cursor.com/cli) (GPT/Claude/Gemini/Grok aggregator) — `curl https://cursor.com/install -fsS | bash`
+- [Codex CLI](https://github.com/openai/codex) (OpenAI): `npm i -g @openai/codex`
+- [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google): see [gemini-cli repo](https://github.com/google-gemini/gemini-cli)
+- [Ollama](https://ollama.com) (local models): install from ollama.com
+- [Cursor CLI](https://cursor.com/cli) (GPT/Claude/Gemini/Grok aggregator): `curl https://cursor.com/install -fsS | bash`
 
 ## Contributing
 
@@ -327,10 +335,7 @@ If you find this project useful, consider supporting my open-source work.
 
 ## License
 
-[![CC0](https://licensebuttons.net/p/zero/1.0/88x31.png)](https://creativecommons.org/publicdomain/zero/1.0/)
-
-To the extent possible under law, the authors have waived all copyright and
-related or neighboring rights to this work.
+MIT. See [LICENSE](LICENSE).
 
 ---
 
