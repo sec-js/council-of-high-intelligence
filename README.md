@@ -5,6 +5,14 @@
 </p>
 
 <p align="center">
+  <img src="assets/github-social.svg" alt="Council social" width="800">
+</p>
+
+<p align="center">
+  <a href="https://www.nyk.dev/oss/council-of-high-intelligence">nyk.dev/oss</a>
+</p>
+
+<p align="center">
   18 AI personas deliberate your hardest decisions across multiple LLM providers. One command.
 </p>
 
